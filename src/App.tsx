@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import Home from './pages/Home';
+import Match from './pages/Match';
+
+import {config} from './config';
+axios.defaults.baseURL = window.location.hostname === "faceit.tips"? config.SERVER_URL : config.SERVER_LOCAL_URL
+
+const App = () => {
+	return (
+		<Router>
+			<Switch>
+				<Route exact path="/" component={Home} />
+				<Route exact path="/match/:id" component={Match} />
+			</Switch>
+		</Router>
+	);
+	}
 
 export default App;
