@@ -1,25 +1,34 @@
 import React from 'react';
-import '../App.css';
+import '../App.scss';
 import { useHistory } from 'react-router-dom';
-import {config} from '../config';
+import config from '../config';
 
-import { Input, Button } from 'antd';
+import { Input, Button, Alert } from 'antd';
+import { trimURL } from '../utils';
 
 const Home = () => {
-    const [id, setId] = React.useState<String | null>();
+    const [url, setURL] = React.useState<string>("");
+    const [lastSearched, setLastSearched] = React.useState<String | null>();
 
     const history = useHistory();
 
     const search = () => {
-        if(id) history.push('/match/' + id)
+        const id = trimURL(url);
+        history.push('/match/' + id)
+        localStorage.setItem('last_searched', id.toString())
     }
+
+    React.useEffect(() => {
+        const lastSearched = localStorage.getItem('last_searched');
+        if(lastSearched) setLastSearched(lastSearched);
+    }, [])
 
     return (
         <div className="page">
-            <span className="title">FACEIT TIPS</span>
-            <div className="container">
-                <span className="text">Analyze matches</span>
-                <Input bordered={false} placeholder="Match ID" className="input" onChange={e => { setId(e.target.value) }}/>
+            <span className="title tracking-in-expand">FACEIT TIPS</span>
+            <div className="col container">
+                <Alert className="alert" message={config.WELCOME_MESSAGE} />
+                <Input bordered={false} placeholder="Match ID or URL" className="input" onChange={e => { setURL(e.target.value) }}/>
                 <Button className="button" type="text" onClick={search}>Analyze</Button>
             </div>
             <span className="version">Closed Beta v{config.VERSION}</span>

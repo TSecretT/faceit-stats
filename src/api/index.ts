@@ -1,22 +1,15 @@
-import Axios from "axios";
-
 const axios = require('axios');
 
 
-export const fetchMatch = async (id: String) => {
-    return await axios.get(`https://api.faceit.com/match/v2/match/${id}`)
+export const fetchMatch = async (id: String) => 
+    await axios.get(`https://api.faceit.com/match/v2/match/${id}`)
     .then((res: { data: any; }) => res.data.payload)
     .catch((error: {response: any}) => { console.log(error) })
-}
 
-export const fetchVoting = async (id: String, entity_type: String) => {
-    return await axios.get(`https://api.faceit.com/democracy/v1/match/${id}/history`)
-    .then((res: {data: any}) => {
-        let entity = res.data.payload.tickets.find((entity: { entity_type: string; }) => entity.entity_type === entity_type)
-        return entity.entities;
-    })
+export const fetchVoting = async (id: String, entity_type: String) =>
+    await axios.get(`https://api.faceit.com/democracy/v1/match/${id}`)
+    .then((res: any) => res.data.payload.tickets.find((entity: { entity_type: string; }) => entity.entity_type === entity_type).entities)
     .catch((error: {response: any}) => {console.log(error)})
-}
 
 export const getPlayerInfo = async ({nickname, id, nicknames, ids}: any) => {
     if(nickname){

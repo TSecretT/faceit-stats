@@ -1,5 +1,7 @@
 const { FaceitIndex, average_allowed } = require('../constants');
 
+export const trimURL = (url: string): string => url.split('/')[url.split('/').length - 1]
+
 // Convert snapshot to list
 export const getListFromSnapshot = (snapshot: any) => {
     let items: any[] = [];
