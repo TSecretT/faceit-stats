@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import config from '../config';
 
 import { Input, Button, Alert } from 'antd';
-import { trimURL } from '../utils';
+import utils from '../utils';
 
 const Home = () => {
     const [url, setURL] = React.useState<string>("");
@@ -13,9 +13,9 @@ const Home = () => {
     const history = useHistory();
 
     const search = () => {
-        const id = trimURL(url);
+        const id = utils.trimURL(url);
         history.push('/match/' + id)
-        localStorage.setItem('last_searched', id.toString())
+        utils.addLastSearched(id);
     }
 
     React.useEffect(() => {
@@ -30,6 +30,10 @@ const Home = () => {
                 <Alert className="alert" message={config.WELCOME_MESSAGE} />
                 <Input bordered={false} placeholder="Match ID or URL" className="input" onChange={e => { setURL(e.target.value) }}/>
                 <Button className="button" type="text" onClick={search}>Analyze</Button>
+
+                {/* <div className="last-searched-container">
+                    <span>Last searched match: </span>
+                </div> */}
             </div>
             <span className="version">Closed Beta v{config.VERSION}</span>
         </div>

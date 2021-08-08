@@ -1,21 +1,23 @@
-const { FaceitIndex, average_allowed } = require('../constants');
+import { Match } from '../types';
+import { FaceitIndex, average_allowed } from '../constants';
 
-export const trimURL = (url: string): string => url.split('/')[url.split('/').length - 1]
+
+const trimURL = (url: string): string => url.split('/')[url.split('/').length - 1]
 
 // Convert snapshot to list
-export const getListFromSnapshot = (snapshot: any) => {
+const getListFromSnapshot = (snapshot: any) => {
     let items: any[] = [];
     snapshot.forEach((item: { val: () => any; key: any; }) => { items.push( {...item.val(), key: item.key} )  })
     return items;
 }
 
 // Sort matches by date created
-export const sortMatches = (matches: any[]) => {
+const sortMatches = (matches: any[]) => {
     return matches.sort((a: { createdAt: string | number | Date; },b: { createdAt: string | number | Date; }) => (new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()) ? 1 : ((new Date(b.createdAt).getTime() > new Date(a.createdAt).getTime()) ? -1 : 0)); 
 }
 
 // Returns true if player id is in match
-export const checkMyselfInMatch = (match: any, id: String) => {
+const checkMyselfInMatch = (match: any, id: String) => {
     if(match && match.teams){
         let players = [];
         for (const [key, value] of Object.entries(match.teams)){
@@ -29,7 +31,7 @@ export const checkMyselfInMatch = (match: any, id: String) => {
     }
 }
 
-export const convertMatches = (matches: any[]) => {
+const convertMatches = (matches: any[]) => {
     let indexes = Object.keys(FaceitIndex)
     return matches.map((match: any) => {
         for(const [key, value] of Object.entries(match)){
@@ -42,11 +44,11 @@ export const convertMatches = (matches: any[]) => {
     })
 }
 
-export const average = (array: any[]) => {
+const average = (array: any[]) => {
     return +(array.reduce((a: string, b: string) => parseFloat(a) + parseFloat(b)) / array.length).toFixed(2);
 }
 
-export const averageOfMatches = (matches: any[]) => {
+const averageOfMatches = (matches: any[]) => {
     let average: any = {};
     average_allowed.forEach((key: string | number) => {
         let matches_ = matches.map((match: { [x: string]: any; }) => match[key]);
@@ -55,7 +57,7 @@ export const averageOfMatches = (matches: any[]) => {
     return average; 
 }
 
-export const countPoints = (data: any) => {
+const countPoints = (data: any) => {
     for(const [map, overall_stats] of Object.entries(data)){
         let stats:any = overall_stats;
         let team1 = 0;
@@ -79,3 +81,45 @@ export const countPoints = (data: any) => {
     }
     return data;
 }
+
+const getLastSearched = () => {
+    const lastSearched: any = localStorage.last_searched;
+    if(!lastSearched) return []
+    return JSON.parse(lastSearched)
+}
+
+const addLastSearched = (id: string) => {
+    let lastSearched: string[] = getLastSearched();
+    lastSearched = [id, ...lastSearched]
+    if(lastSearched.length > 5) lastSearched = lastSearched.slice(0, 5)
+    localStorage.setItem("last_searched", JSON.stringify(lastSearched))
+}
+
+const extractPlayers = (match: Match) => {
+    let players = [];
+    try{
+        if(match.teams){
+            for(const i in match.teams){
+                players.push(...match.teams[i].roster.map(user => user.id))
+            }
+        }
+    } catch(err){
+        console.log(`Match ${match.id} error - ${err}`)
+    }
+    return players;
+}
+
+
+export default {
+    trimURL,
+    getListFromSnapshot,
+    sortMatches,
+    checkMyselfInMatch,
+    convertMatches,
+    average,
+    averageOfMatches,
+    countPoints,
+    getLastSearched,
+    addLastSearched,
+    extractPlayers
+};
