@@ -5,4 +5,4 @@ This app was made for personal use while I was grinding faceit solo queue or wit
 
 
 ## Usage
-<img src="/assets/demo.gif" width="1000"/>
+<img src="/src/assets/demo.gif" width="1000"/>
