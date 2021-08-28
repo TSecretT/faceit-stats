@@ -5,4 +5,4 @@ This app was made for personal use while I was grinding faceit solo queue or wit
 
 
 ## Usage
-![](https://media.giphy.com/media/4Vdp3iiHyMIWlsnFyM/giphy.gif?cid=790b76115a43711d3e40f91256f9154f76f329d27f78ad48&rid=giphy.gif&ct=g)
+![](https://media.giphy.com/media/4Vdp3iiHyMIWlsnFyM/giphy.gif?cid=790b76115a43711d3e40f91256f9154f76f329d27f78ad48&rid=giphy.gif&ct=g =500x)
