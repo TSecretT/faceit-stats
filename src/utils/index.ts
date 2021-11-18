@@ -95,20 +95,27 @@ const addLastSearched = (id: string) => {
     localStorage.setItem("last_searched", JSON.stringify(lastSearched))
 }
 
-const extractPlayers = (match: Match) => {
-    let players = [];
+const extractPlayers = (match: Match, merge:boolean=true, nicknames:boolean=true) => {
     try{
         if(match.teams){
-            for(const i in match.teams){
-                players.push(...match.teams[i].roster.map(user => user.id))
+            if (merge){
+                let players = [];
+                for(const i in match.teams){
+                    players.push(...match.teams[i].roster.map(user => nicknames? user.nickname : user.id))
+                }
+                return players;
+            } else {
+                let players: any = {};
+                for(const faction in match.teams){
+                    players[faction] = match.teams[faction].roster.map(user => nicknames? user.nickname : user.id);
+                }
+                return players;
             }
         }
     } catch(err){
         console.log(`Match ${match.id} error - ${err}`)
     }
-    return players;
 }
-
 
 export default {
     trimURL,

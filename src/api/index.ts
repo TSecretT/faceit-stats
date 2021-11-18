@@ -48,9 +48,18 @@ const getPlayerMatches = async ({id, ids}: any) => {
     }
 }
 
+const getMultipleMatchDetails = async (ids: any) => {
+    const promises = ids.map((id: any) => fetchMatch(id))
+    return await axios.all(promises)
+    .then(axios.spread((...responses: any[]) => {
+        return responses.map(response => response)
+    }))
+}
+
 export default {
     fetchMatch,
     fetchVoting,
     getPlayerInfo,
-    getPlayerMatches
+    getPlayerMatches,
+    getMultipleMatchDetails
 }

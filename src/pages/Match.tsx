@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.scss';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 
 import { Input, Button } from 'antd';
 import { MatchStatus, mapsImages, maps } from '../constants';
@@ -23,6 +23,8 @@ import {
     level10
 } from '../assets';
 import { PlayerCard } from '../components';
+
+import { MatchStat } from '../types';
 
 const levels: {[index: string]:any} = {
     1: level1,
@@ -49,6 +51,12 @@ const Match = () => {
     const [players, setPlayers] = React.useState<any>();
     const [mapsData, setMaps] = React.useState<any>();
 
+    const [playersInfo, setPlayersInfo] = React.useState<any>();
+    const [myMatches, setMyMatches] = React.useState<string[]>();
+    const [findings, setFindings] = React.useState<any>();
+
+    const [parseTime, setParseTime] = React.useState<string>();
+
     const { id } = useParams<ParamTypes>();
 
     const init = async () => {
@@ -57,46 +65,25 @@ const Match = () => {
         setMatch(match);
         const voting = await api.fetchVoting(id, 'map');
         setVoting(voting);
-        parseMaps(match);
+        await parseMaps(match);
         setLoaded(true);
     }
 
     const parseMaps = async (match: any) => {
         if(!match) return;
-        // let data: any = {};
-        // let players: any = {faction1: {}, faction2: {}};
-        // // Create each map empty object
-        // maps.forEach(map => {data[map] = {}})
-        // for (var i of [1, 2]){
-        //     // Get ids of players from 1 team
-        //     const ids = match.teams[`faction${i}`].roster.map((player: any) => player.id);
-        //     // Get basic info
-        //     const players_info = await getPlayerInfo({ ids });
-        //     // Get past 100 matches
-        //     const players_stats = await getPlayerMatches({ ids });
-        //     players[`faction${i}`] = {players_info, players_stats}
-        //     // Filter matches and get average stats
-        //     for(const j in maps){
-        //         let team_data = ids.map((id: string, k: number) => {
-        //             let map_matches = players_stats[k].filter((match: any) => match['i1'] === maps[j]);
-        //             map_matches = convertMatches(map_matches);
-        //             map_matches = averageOfMatches(map_matches);
-        //             return map_matches;
-        //         })
-        //         data[maps[j]][`faction${i}`] = averageOfMatches(team_data);
-        //     }
-        // }
-        // data = countPoints(data);
-        // setData(data);
-        // processPlayers(players);
 
-        const players: any[] = utils.extractPlayers(match);
+        const startTime: number = new Date().getTime();
+
+        const players: any[] = utils.extractPlayers(match, true, false);
         const playersInfo: any[] = await api.getPlayerInfo({ ids: players });
-        const playersMatches: any[] = await api.getPlayerMatches({ ids: players })
+        const playersMatches: MatchStat[][] = await api.getPlayerMatches({ ids: players })
         const playersMatchesAverage: any[] = playersMatches.map((matches: any[]) => utils.averageOfMatches(utils.convertMatches(matches)));
         const toReturn: any[] = playersInfo.map((playerInfo: any, index: number) => { return { ...playerInfo, matches: playersMatchesAverage[index] } })
         setPlayers(toReturn);
 
+        setPlayersInfo(playersMatches);
+        setMyMatches(playersMatches.find((matches: MatchStat[]) => matches[0].nickname === localStorage.nickname)?.map((match: MatchStat) => match.matchId));
+        
         let mapsData: any = {}
         maps.forEach((map: string) => {
             mapsData[map] = { faction1: [], faction2: [] }
@@ -110,27 +97,10 @@ const Match = () => {
         })
         mapsData = utils.countPoints(mapsData)
         setMaps(mapsData)
-    }
 
-    const processPlayers = (players: any) => {
-        let toReturn: any[] = [];
-
-        // for(const faction in players){
-        //     console.log(players[faction].player_stats.map((stats: any) => {
-        //         let matches = convertMatches(stats);
-        //         matches = averageOfMatches(matches);
-        //         toReturn.push({ ...players[team].players_info[i], matches })
-        //     } ))
-        // }
-
-        // players[team].players_stats.forEach((player_matches: any, i: number) => {
-        //     let matches = convertMatches(player_matches);
-        //     matches = averageOfMatches(matches);
-        //     to_return.push({...players[team].players_info[i], matches})
-        // })
-
-        // console.log(to_return);
-        // setPlayers(to_return);
+        const parseTime: string = ((new Date().getTime() - startTime) / 1000).toFixed(3)
+        setParseTime(parseTime)
+        return
     }
 
     const renderTeams = () => {
@@ -184,9 +154,62 @@ const Match = () => {
         </>
     }
 
+    const findPlayedPlayers = async () => {
+        if (!localStorage.nickname) return;
+        const thisMatchPlayers: any = utils.extractPlayers(match, true, true)
+        .filter((player: string) => player !== localStorage.nickname);
+        
+        const matches: any[] = await api.getMultipleMatchDetails(myMatches)
+        const myID: string = players.find((player: any) => player.nickname === localStorage.nickname)?.guid;
+
+        const playersAllData: any[] = players;
+
+        let findings: any = {};
+        
+        let myParty: any[] = [];
+        for(const partyID in match.entityCustom.parties){
+            if (match.entityCustom.parties[partyID].includes(myID)){
+                myParty = match.entityCustom.parties[partyID].map((playerID: string) => playersAllData.find((player: any) => player.guid === playerID).nickname);
+                break;
+            }
+        }
+
+        matches.forEach((match: any) => {
+            if (match.id === id ) return;
+            const players: any = utils.extractPlayers(match, false, true);
+
+            findings[match.id] = {
+                matchID: match.id,
+                time: moment(Date.parse(match.startedAt)).format("HH:mm DD/MM/YY"), 
+                won: players[match.summaryResults.winner].includes(localStorage.nickname),
+                players: []
+            }
+            
+            for(const playerName of thisMatchPlayers){
+                if (!myParty.includes(playerName)){
+                    if ( (players.faction1.includes(playerName) && players.faction1.includes(localStorage.nickname))
+                    || (players.faction2.includes(playerName) && players.faction2.includes(localStorage.nickname)) ){
+                        findings[match.id].players.push({  name: playerName, teammate: true });
+                    } else if ( (players.faction1.includes(playerName) && players.faction2.includes(localStorage.nickname))
+                    || (players.faction2.includes(playerName) && players.faction1.includes(localStorage.nickname)) ){
+                        findings[match.id].players.push({  name: playerName, teammate: false });
+                    }
+                }
+            }
+
+        })
+
+        findings = Object.keys(findings).map((matchID: string) => findings[matchID]).filter((match: any) => match.players.length > 0)
+        setFindings(findings);
+    }
+
     React.useEffect(() => {
         init();
     }, [])
+
+    React.useEffect(() => {
+        if(match && players && myMatches) findPlayedPlayers()
+    }, [match, players, myMatches])
 
     return (
         <div className="page">
@@ -230,9 +253,37 @@ const Match = () => {
                         
                         {renderMaps()}
                             
+                        <Divider />
+                        <span className="header">Notable players</span>
+                        {findings?.length? findings.map((data: any) => {
+                            if(data.players.length === 0) return null;
+                            
+                            const playedWith: string[] = data.players.filter((data: any) => data.teammate).map((data: any) => data.name)
+                            const playedVS: string[] = data.players.filter((data: any) => !data.teammate).map((data: any) => data.name)
+                            
+                            return <>
+                                <div className="row player-with-container" key={data.matchID} onClick={()=> window.open(`https://www.faceit.com/en/csgo/room/${match.id}/scoreboard`, "_blank")}>
+                                    <span className="text">{data.time}</span>
+                                    
+                                    <span className={`result ${data.won? 'winner' : 'loser'}`}>{data.won? "Win" : "Loss"}</span>
+
+                                    {playedWith.length > 0 && <span className="text">With {playedWith.map((name: string) => <strong>{name} </strong> )}</span> }
+                                    {playedVS.length > 0 && <span className="text">Versus {playedVS.map((name: string) => <strong>{name} </strong> )}</span> }
+
+                                    
+                                </div>
+                            </>
+                        }) : <>
+                        <span className="text">{localStorage.nickname} have not played with these played before</span>
+                        </>}
+
+                        <Divider />
                     </>
                 )
                 : null}
+
+
+                {loaded && <span className="description">Parsed in {parseTime} seconds</span>}
                 <Button className="button back" type="ghost" href="/">Back</Button>
             </div>
         </div>

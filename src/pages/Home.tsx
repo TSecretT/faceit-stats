@@ -8,20 +8,15 @@ import utils from '../utils';
 
 const Home = () => {
     const [url, setURL] = React.useState<string>("");
-    const [lastSearched, setLastSearched] = React.useState<String | null>();
 
     const history = useHistory();
 
     const search = () => {
+        if (!url) return;
         const id = utils.trimURL(url);
         history.push('/match/' + id)
         utils.addLastSearched(id);
     }
-
-    React.useEffect(() => {
-        const lastSearched = localStorage.getItem('last_searched');
-        if(lastSearched) setLastSearched(lastSearched);
-    }, [])
 
     return (
         <div className="page">
@@ -35,7 +30,7 @@ const Home = () => {
                     <span>Last searched match: </span>
                 </div> */}
             </div>
-            <span className="version">Closed Beta v{config.VERSION}</span>
+            <span className="version">Beta v{config.VERSION}</span>
         </div>
     )
 }

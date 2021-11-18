@@ -66,3 +66,44 @@ export interface Hook {
     version: number,
     payload: Match
 }
+
+export interface MatchStat {
+    "Assists": string
+    "Deaths": string
+    "Final Score": string
+    "First Half Score": string
+    "HS": string
+    "HS %": string
+    "K/D": string
+    "K/R": string
+    "Kills": string
+    "MVPs": string
+    "Map": string
+    "Map ID": string
+    "Penta Kills": string
+    "Quadro Kills": string
+    "Region": string
+    "Result": string
+    "Rounds": string
+    "Second Half Score": string
+    "Team Name": string
+    "Tripple Kills": string
+    "bestOf": string
+    "c1": string
+    "competitionId": string
+    "created_at": number
+    "date": number
+    "elo":string
+    "game": string
+    "gameMode": string
+    "i19": string
+    "matchId": string
+    "matchRound": string
+    "nickname": string
+    "played": string
+    "playerId": string
+    "premade": boolean
+    "status": string
+    "teamId": string
+    "updated_at": number
+}

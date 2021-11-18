@@ -142,6 +142,12 @@ body{
     border: 1px solid $MAIN_ORANGE
 }
 
+.result{
+    font-weight: bold;
+    border-radius: 16x;
+    padding: 4px;
+}
+
 .winner{
     color: green;
 }
@@ -186,6 +192,7 @@ body{
 
 .flag{
     width: 18px;
+    border: 1px solid GRAY;
 }
 
 .stats{
@@ -222,6 +229,12 @@ body{
     color: tomato;
     font-size: 24px;
     margin: 30px;
+}
+
+
+.player-with-container{
+    padding: 8px;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 1000px){

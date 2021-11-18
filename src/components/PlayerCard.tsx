@@ -37,7 +37,7 @@ const PlayerCard = ({ player, side }: any) => {
         <div className="nickname-container" style={{ flexDirection: side === "left"? "row" : "row-reverse" }}>
             <div className="row" style={{ flexDirection: side === "left"? "row" : "row-reverse" }}>
                 <Tooltip title={player.country.toUpperCase()}>
-                    <img src={`https://www.countryflags.io/${player.country}/flat/64.png`} alt="flag" className="flag" />
+                    <img src={`https://flagcdn.com/${player.country}.svg`} alt="flag" className="flag" />
                 </Tooltip>
                 <span className="player-name" onClick={() => history.push(`/player/${player.guid}`)}>{player.nickname}</span>
             </div>
