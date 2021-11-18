@@ -25,3 +25,6 @@ yarn-error.log*
 updates.txt
 package-lock.json
 .eslintcache
+firebase-debug.log
+
+.firebase/
