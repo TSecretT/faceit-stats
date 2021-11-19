@@ -262,7 +262,7 @@ const Match = () => {
                             const playedVS: string[] = data.players.filter((data: any) => !data.teammate).map((data: any) => data.name)
                             
                             return <>
-                                <div className="row player-with-container" key={data.matchID} onClick={()=> window.open(`https://www.faceit.com/en/csgo/room/${match.id}/scoreboard`, "_blank")}>
+                                <div className="row player-with-container" key={data.matchID} onClick={()=> window.open(`https://www.faceit.com/en/csgo/room/${data.matchID}/scoreboard`, "_blank")}>
                                     <span className="text">{data.time}</span>
                                     
                                     <span className={`result ${data.won? 'winner' : 'loser'}`}>{data.won? "Win" : "Loss"}</span>
