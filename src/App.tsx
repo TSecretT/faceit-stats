@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { Home, Player, Match } from './pages';
+import { Home, Player, Match, Settings } from './pages';
 import './App.scss';
 
 import config from './config';
@@ -15,6 +15,7 @@ const App = () => {
 				<Route exact path="/" component={Home} />
 				<Route exact path="/match/:id" component={Match} />
 				<Route exact path="/player/:id" component={Player} />
+				<Route exact path="/settings" component={Settings} />
 			</Switch>
 		</Router>
 	);

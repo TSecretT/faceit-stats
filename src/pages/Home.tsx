@@ -26,9 +26,7 @@ const Home = () => {
                 <Input bordered={false} placeholder="Match ID or URL" className="input" onChange={e => { setURL(e.target.value) }}/>
                 <Button className="button" type="text" onClick={search}>Analyze</Button>
 
-                {/* <div className="last-searched-container">
-                    <span>Last searched match: </span>
-                </div> */}
+                <Button className="button" type="ghost" href="/settings">Settings</Button>
             </div>
             <span className="version">Beta v{config.VERSION}</span>
         </div>

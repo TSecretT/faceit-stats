@@ -1,43 +1,18 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
 
-import { Input, Button } from 'antd';
+import { notification , Button } from 'antd';
 import { MatchStatus, mapsImages, maps } from '../constants';
 import api from '../api';
 import utils from '../utils';
-import config from '../config';
 
 import { Divider } from 'antd';
 
-import {
-    level1,
-    level2,
-    level3,
-    level4,
-    level5,
-    level6,
-    level7,
-    level8,
-    level9,
-    level10
-} from '../assets';
 import { PlayerCard } from '../components';
 
 import { MatchStat } from '../types';
 
-const levels: {[index: string]:any} = {
-    1: level1,
-    2: level2,
-    3: level3,
-    4: level4,
-    5: level5,
-    6: level6,
-    7: level7,
-    8: level8,
-    9: level9,
-    10: level10,
-}
 
 interface ParamTypes{
     id: string;
@@ -51,13 +26,13 @@ const Match = () => {
     const [players, setPlayers] = React.useState<any>();
     const [mapsData, setMaps] = React.useState<any>();
 
-    const [playersInfo, setPlayersInfo] = React.useState<any>();
     const [myMatches, setMyMatches] = React.useState<string[]>();
     const [findings, setFindings] = React.useState<any>();
 
     const [parseTime, setParseTime] = React.useState<string>();
 
     const { id } = useParams<ParamTypes>();
+    const history: any = useHistory();
 
     const init = async () => {
         const match = await api.fetchMatch(id);
@@ -81,7 +56,6 @@ const Match = () => {
         const toReturn: any[] = playersInfo.map((playerInfo: any, index: number) => { return { ...playerInfo, matches: playersMatchesAverage[index] } })
         setPlayers(toReturn);
 
-        setPlayersInfo(playersMatches);
         setMyMatches(playersMatches.find((matches: MatchStat[]) => matches[0].nickname === localStorage.nickname)?.map((match: MatchStat) => match.matchId));
         
         let mapsData: any = {}
@@ -203,8 +177,19 @@ const Match = () => {
         setFindings(findings);
     }
 
+    const checkUsername = () => {
+        if (localStorage.nickname) return;
+        notification.open({
+            message: 'No username saved',
+            description:
+            'You have not set your Faceit username in settings. It is needed to get some extra usefull information like players you have played with before. Click on this window to add your username',
+            onClick: () => { history.push("/settings")},
+        })
+    }
+
     React.useEffect(() => {
         init();
+        checkUsername();
     }, [])
 
     React.useEffect(() => {
@@ -273,9 +258,10 @@ const Match = () => {
                                     
                                 </div>
                             </>
-                        }) : <>
+                        }) : localStorage.nickname? <>
                         <span className="text">{localStorage.nickname} have not played with these played before</span>
-                        </>}
+                        </>
+                        : <span className="text">Enter you Faceit username in settings to see</span>}
 
                         <Divider />
                     </>
