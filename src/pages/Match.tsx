@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
+import firebase from '../api/firebase';
 
 import { notification , Button } from 'antd';
 import { MatchStatus, mapsImages, maps } from '../constants';
@@ -8,9 +9,7 @@ import api from '../api';
 import utils from '../utils';
 
 import { Divider } from 'antd';
-
 import { PlayerCard } from '../components';
-
 import { MatchStat } from '../types';
 
 
