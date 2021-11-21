@@ -5,10 +5,15 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Home, Player, Match, Settings } from './pages';
 import './App.scss';
 
+import firebase from './api/firebase';
+
 import config from './config';
 axios.defaults.baseURL = window.location.hostname === "faceit.tips"? config.SERVER_URL : config.SERVER_LOCAL_URL
 
 const App = () => {
+
+	console.log(firebase.analytics.app.name)
+
 	return (
 		<Router>
 			<Switch>
