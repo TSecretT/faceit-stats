@@ -43,7 +43,7 @@ const PlayerCard = ({ player, side }: any) => {
             </div>
             <div className="level" style={{ flexDirection: side === "left"? "row" : "row-reverse" }}>
                 <span className="elo">{player.games.csgo.faceit_elo}</span>
-                <img src={levels[player.csgo_skill_level]} alt="level" className="level-icon" />
+                <img src={levels[player.games.csgo.skill_level]} alt="level" className="level-icon" />
             </div>
         </div>
         <div className="stats">
