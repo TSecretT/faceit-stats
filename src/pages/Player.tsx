@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate, NavigateFunction } from 'react-router-dom';
 
 import api from '../api';
 import utils from '../utils';
@@ -9,16 +9,16 @@ const Player = () => {
     const [matches, setMatches] = React.useState<any[]>();
 
     const { id }: any = useParams();
-    const history: any = useHistory();
+    const navigate: NavigateFunction = useNavigate();
 
     const init = async () => {
-        const playerData: any = await api.getPlayerInfo({ id })
-        const playerMatches: any[] = await api.getPlayerMatches({ id })
-        .then((matches: any[]) => utils.convertMatches(matches))
+        // const playerData: any = await api.getPlayerInfo({ id })
+        // const playerMatches: any[] = await api.getPlayerMatches({ id })
+        // .then((matches: any[]) => utils.convertMatches(matches))
 
 
-        setPlayer(playerData);
-        setMatches(playerMatches);
+        // setPlayer(playerData);
+        // setMatches(playerMatches);
     }
 
     React.useEffect(() => {

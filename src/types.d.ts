@@ -21,8 +21,8 @@ export interface Team {
     name: string,
     type: string,
     avatar: string,
-    leader_id: string,
-    co_leader_id: string,
+    leader: string,
+    co_leader: string,
     roster: Player[],
     substitutions: number,
     substitutes?: null
@@ -34,7 +34,7 @@ export interface Player {
     avatar: string,
     game_id: string,
     game_name: string,
-    game_skill_level: number,
+    gameSkillLevel: number,
     membership: string,
     anticheat_required: boolean
 }
@@ -50,7 +50,7 @@ export interface Match{
         name: string,
         type: string
     },
-    teams?: Team[]
+    teams: Team[]
     created_at: string,
     updated_at: string
 }
@@ -106,4 +106,16 @@ export interface MatchStat {
     "status": string
     "teamId": string
     "updated_at": number
+}
+
+export interface DecodedToken {
+    aud: string;
+    birthdate: string;
+    family_name: string;
+    given_name: string;
+    guid: string;
+    iss: string;
+    locale: string;
+    nickname: string;
+    picture: string;
 }

@@ -1,8 +1,21 @@
 import { Match } from '../types';
 import { FaceitIndex, average_allowed } from '../constants';
-
+import jwt_decode from "jwt-decode";
+import { DecodedToken } from "../types";
 
 const trimURL = (url: string): string => url.split('/')[url.split('/').length - 1]
+
+const authed = (): boolean => {
+    try{
+        const token = localStorage.faceit_token
+        const id_token = localStorage.faceit_id
+        if(!token || !id_token) return false;
+        const decoded: DecodedToken = jwt_decode(localStorage.faceit_token);
+        return decoded? true : false;
+    } catch{
+        return false
+    }
+}
 
 // Convert snapshot to list
 const getListFromSnapshot = (snapshot: any) => {
@@ -118,6 +131,7 @@ const extractPlayers = (match: Match, merge:boolean=true, nicknames:boolean=true
 }
 
 export default {
+    authed,
     trimURL,
     getListFromSnapshot,
     sortMatches,
