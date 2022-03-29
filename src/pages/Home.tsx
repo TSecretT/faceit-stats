@@ -1,36 +1,59 @@
-import React from 'react';
-import '../App.scss';
-import { useHistory } from 'react-router-dom';
-import config from '../config';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthedCard } from "../components";
+import config from "../config";
 
-import { Input, Button, Alert } from 'antd';
-import utils from '../utils';
+import utils from "../utils";
 
 const Home = () => {
-    const [url, setURL] = React.useState<string>("");
+  const [url, setURL] = React.useState<string>("");
 
-    const history = useHistory();
+  const navigate = useNavigate();
 
-    const search = () => {
-        if (!url) return;
-        const id = utils.trimURL(url);
-        history.push('/match/' + id)
-        utils.addLastSearched(id);
-    }
+  const search = () => {
+    if (!url) return;
+    const id = utils.trimURL(url);
+    navigate("/match/" + id);
+    utils.addLastSearched(id);
+  };
 
-    return (
-        <div className="page">
-            <span className="title tracking-in-expand">FACEIT TIPS</span>
-            <div className="col container">
-                <Alert className="alert" message={config.WELCOME_MESSAGE} />
-                <Input bordered={false} placeholder="Match ID or URL" className="input" onChange={e => { setURL(e.target.value) }}/>
-                <Button className="button" type="text" onClick={search}>Analyze</Button>
+  const onFaceitLogin = () => {
+    const url: string = `https://accounts.faceit.com/?client_id=d12c88f9-bd7c-4d03-8144-d319015e5d14&redirect_popup=true&response_type=token`
+    window.open(url, '_blank', 'noopener,noreferrer')
+  };
 
-                <Button className="button" type="ghost" href="/settings">Settings</Button>
-            </div>
-            <span className="version">Beta v{config.VERSION}</span>
+
+
+  return (
+    <div className="page">
+      <div className="hero min-h-screen bg-base-200">
+        <div className="hero-content text-center">
+          <div className="max-w-md flex flex-col">
+            <h1 className="text-5xl font-bold">Faceit Tips</h1>
+            <p className="py-6">{config.WELCOME_MESSAGE}</p>
+
+            <input
+              placeholder="Match ID or URL"
+              className="match-id-input"
+              onChange={(e) => {
+                setURL(e.target.value);
+              }}
+            />
+            <button className="btn btn-primary" onClick={search}>
+              Analyze
+            </button>
+            {utils.authed()? 
+                <AuthedCard size="large" />
+                :
+                <button className="btn btn-accent my-4" onClick={onFaceitLogin}>Connect faceit profile</button>
+            }
+
+            <p className="text-secondary">Beta v{config.VERSION}</p>
+          </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
 export default Home;

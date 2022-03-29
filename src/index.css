@@ -1,2 +1,51 @@
-@import '~antd/dist/antd.css';
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    #root, body, .page{
+        @apply min-h-screen w-full bg-primary flex flex-col items-center
+    }
+
+    .row {
+        @apply flex flex-row items-center;
+    }
+
+    .col {
+        @apply flex flex-col items-center;
+    }
+
+    .match-id-input {
+        @apply input input-bordered input-accent w-full my-4;
+    }
+
+    .auth-card {
+        @apply flex flex-row items-center justify-between
+        p-4 rounded-md border-2 border-accent my-4
+    }
+    
+    .match-container{
+        @apply border-2 border-accent rounded-md
+        p-2 max-w-4xl
+        flex flex-col items-center;
+    }
+
+    h1 {
+        @apply font-bold text-3xl my-4
+    }
+
+    .player-container{
+        @apply flex flex-row items-center
+    }
+
+    .banned{
+        @apply opacity-5
+        hover:opacity-100
+        transition-all duration-1000;
+    }
+
+    .picked {
+        @apply border-2 border-accent
+    }
+}

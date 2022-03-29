@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { Tooltip } from 'antd';
 
 import {
     level1,
@@ -14,7 +13,8 @@ import {
     level9,
     level10
 } from '../assets';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, NavigateFunction } from 'react-router-dom';
+import { Player } from '../types';
 
 const levels: {[index: string]:any} = {
     1: level1,
@@ -29,30 +29,37 @@ const levels: {[index: string]:any} = {
     10: level10,
 }
 
-const PlayerCard = ({ player, side }: any) => {
+const PlayerCard = ({ player, side, stats }: { player: Player, side: string, stats: any }) => {
 
-    const history: any = useHistory();
+    const navigate: NavigateFunction = useNavigate();
 
-    return <div className="player-container">
-        <div className="nickname-container" style={{ flexDirection: side === "left"? "row" : "row-reverse" }}>
-            <div className="row" style={{ flexDirection: side === "left"? "row" : "row-reverse" }}>
-                <Tooltip title={player.country.toUpperCase()}>
-                    <img src={`https://flagcdn.com/${player.country}.svg`} alt="flag" className="flag" />
-                </Tooltip>
-                <span className="player-name" onClick={() => history.push(`/player/${player.guid}`)}>{player.nickname}</span>
-            </div>
-            <div className="level" style={{ flexDirection: side === "left"? "row" : "row-reverse" }}>
-                <span className="elo">{player.games.csgo.faceit_elo}</span>
-                <img src={levels[player.games.csgo.skill_level]} alt="level" className="level-icon" />
-            </div>
+    return <div className={`player-container ${side === "right" ? "flex-row-reverse" : ""} my-2`}>
+        
+        <div className="col justify-evenly h-full">
+            <img src={levels[player.gameSkillLevel]} className='w-10 m-1' alt="level" />
+            <img src={`https://flagcdn.com/kz.svg`} className='w-10 m-1' alt="flag" />
         </div>
-        <div className="stats">
-            {Object.keys(player.matches).map((stat: any, i: number) => 
-                <div className="stat-container" key={i}>
-                    <span className="stat-name"><u>{stat}</u></span>
-                    <span className="stat-value">{player.matches[stat]}</span>
-                </div>
-            )}
+
+        <div className={`col w-96 mx-1 ${side === 'right'? "items-end" : "items-start"} p-2`}>
+            <div className={`row justify-between w-full ${side === "right" ? "flex-row-reverse" : ""}`}>
+                <p className="mx-2">{player.nickname}</p>
+                <p className="mx-2">2012</p>
+            </div>
+            <table className="table table-compact w-full mx-2">
+                <thead>
+                    <tr>
+                        {Object.keys(stats[player.id]).map((keyName: string, i: number) => <th key={i}>{keyName}</th>)}
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr>
+                        {Object.keys(stats[player.id]).map((keyName: string, i: number) => 
+                            <td >{stats[player.id][keyName]}</td>
+                        )}
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { Modal, Button, Input, Form } from 'antd';
 
 const Feedback = ({ visible, switchModal }: any) => {
     const [message, setMessage] = React.useState<string>("");
@@ -15,18 +14,18 @@ const Feedback = ({ visible, switchModal }: any) => {
         switchModal(false);
     }
 
-    return (
-        <Modal
-            visible={visible}
-            onOk={onSubmit}
-            onCancel={onClose}
-            footer={[
-                <Button className="button" type="ghost" onClick={onClose}>Cancel</Button>,
-                <Button className="button" type="ghost" onClick={onSubmit}>Submit</Button>
-            ]}
-        >
-            Hello
-        </Modal>
+    return ( <div></div>
+        // <Modal
+        //     visible={visible}
+        //     onOk={onSubmit}
+        //     onCancel={onClose}
+        //     footer={[
+        //         <Button className="button" type="ghost" onClick={onClose}>Cancel</Button>,
+        //         <Button className="button" type="ghost" onClick={onSubmit}>Submit</Button>
+        //     ]}
+        // >
+        //     Hello
+        // </Modal>
     )
 }
 

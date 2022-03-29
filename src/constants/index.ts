@@ -20,7 +20,8 @@ export const mapsImages:{[index:string]:any} = {
     "de_mirage": "https://assets.faceit-cdn.net/third_party/games/4f899245-2fa8-4e52-ad9a-4a363613c19e/assets/votables/b846f806-1957-4456-952e-e0f85233b5d7_1589195893467.jpeg",
     "de_dust2": "https://assets.faceit-cdn.net/third_party/games/4f899245-2fa8-4e52-ad9a-4a363613c19e/assets/votables/ea89f284-db87-48e4-a492-fee976f40149_1589575282787.jpeg",
     "de_cache": "https://assets.faceit-cdn.net/third_party/games/4f899245-2fa8-4e52-ad9a-4a363613c19e/assets/votables/b7b9388c-a5ad-44a0-8b80-145113dfe573_1589578263519.jpeg",
-    "de_ancient": "https://assets.faceit-cdn.net/third_party/games/4f899245-2fa8-4e52-ad9a-4a363613c19e/assets/votables/7e1736a3-8ea9-4e2b-9bfc-2b0c97105823_1607106278884.jpeg"
+    "de_ancient": "https://img-cdn.hltv.org/gallerypicture/JOV1xZ_KnQaUGyR6XUD1zb.png?ixlib=java-2.1.0&w=800&s=008ee637ec050658c5636dfd3aa28770"
+    // "de_ancient": "https://assets.faceit-cdn.net/third_party/games/4f899245-2fa8-4e52-ad9a-4a363613c19e/assets/votables/7e1736a3-8ea9-4e2b-9bfc-2b0c97105823_1607106278884.jpeg"
 }
 
 export const maps: string[] = [
