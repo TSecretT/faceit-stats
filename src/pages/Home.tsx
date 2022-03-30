@@ -18,7 +18,8 @@ const Home = () => {
   };
 
   const onFaceitLogin = () => {
-    const url: string = `https://accounts.faceit.com/?client_id=d12c88f9-bd7c-4d03-8144-d319015e5d14&redirect_popup=true&response_type=token`
+    const client_id: string = config.DEV? "e49a78de-e297-4bd1-9aad-d78940e3c6ba" : "d12c88f9-bd7c-4d03-8144-d319015e5d14";
+    const url: string = `https://accounts.faceit.com/?client_id=${client_id}&redirect_popup=true&response_type=token`
     window.open(url, '_blank', 'noopener,noreferrer')
   };
 

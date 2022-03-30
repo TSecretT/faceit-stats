@@ -1,21 +1,15 @@
 import React from "react";
-import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { DecodedToken } from "../types";
+import queryString from 'query-string';
 
-function useQuery() {
-    const { search } = useLocation();
-  
-    return React.useMemo(() => new URLSearchParams(search), [search]);
-}
 
 const Auth = () => {
-    const query = useQuery();
     const navigate: NavigateFunction = useNavigate();
 
     React.useEffect(() => {
-        const token: string|null = query.get('token');
-        const id_token: string|null = query.get('id_token')
+        const { token, id_token }: any = queryString.parse(window.location.hash);
 
         if (token && id_token){
             try{
