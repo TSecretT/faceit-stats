@@ -52,10 +52,11 @@ const Match = () => {
             <div className="match-container">
                 <h1>Match analysis</h1>
                 <p>MATCH ID: {match.id}</p>
-                <div className="flex flex-row">
+                <div className="flex flex-row items-center">
                     <div className="badge badge-accent m-2">{match.game.toUpperCase()}</div>
                     <div className="badge badge-accent m-2">{match.entity.name.toUpperCase()}</div>
                     <div className="badge badge-accent m-2">{match.region.toUpperCase()}</div>
+                    {match.locations?.length && <img alt="server-location" className='rounded-sm m-2 w-10 h-5' src={match.locations[0].image_sm}/>}
                 </div>
 
                 <div className="divider" />

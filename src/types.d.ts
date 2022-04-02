@@ -36,7 +36,8 @@ export interface Player {
     game_name: string,
     gameSkillLevel: number,
     membership: string,
-    anticheat_required: boolean
+    anticheat_required: boolean,
+    elo: number
 }
 
 export interface Match{
@@ -52,7 +53,17 @@ export interface Match{
     },
     teams: Team[]
     created_at: string,
-    updated_at: string
+    updated_at: string,
+    locations?: Location[]
+}
+
+export interface Location {
+    class_name: string,
+    game_location_id: string,
+    guid: string,
+    image_lg: string,
+    image_sm: string,
+    name: string
 }
 
 export interface Hook {

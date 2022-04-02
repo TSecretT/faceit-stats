@@ -43,7 +43,7 @@ const PlayerCard = ({ player, side, stats }: { player: Player, side: string, sta
         <div className={`col w-96 mx-1 ${side === 'right'? "items-end" : "items-start"} p-2`}>
             <div className={`row justify-between w-full ${side === "right" ? "flex-row-reverse" : ""}`}>
                 <p className="mx-2">{player.nickname}</p>
-                <p className="mx-2">2012</p>
+                <p className="mx-2">{player.elo}</p>
             </div>
             <table className="table table-compact w-full mx-2">
                 <thead>
